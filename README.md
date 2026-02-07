@@ -272,5 +272,3 @@ uvicorn app:app --port 8000
 ## 🧾 Conclusion
 
 Cette preuve de concept illustre comment des **tactiques de disponibilité simples**; détection de défaillance et redondance avec basculement peuvent être intégrées dans une architecture web afin d’améliorer la **résilience** face aux pannes, tout en permettant une **mesure objective** de leur efficacité à l’aide de métriques précises.
-
-```
