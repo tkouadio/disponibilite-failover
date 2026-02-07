@@ -1,0 +1,76 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environnements virtuels
+venv/
+.venv/
+env/
+ENV/
+
+# Fichiers de cache / tests
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+*.out
+
+# =========================
+# Environnements / secrets
+# =========================
+.env
+.env.*
+*.env
+
+# =========================
+# Docker
+# =========================
+# (On versionne Dockerfile et docker-compose.yml)
+docker-compose.override.yml
+
+# =========================
+# IDE / OS
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# =========================
+# Archives / exports
+# =========================
+*.zip
+*.tar
+*.tar.gz
+
+# =========================
+# Démonstrations
+# =========================
+demo/
+videos/
+recordings/
+*.mp4
+*.mov
+*.avi
