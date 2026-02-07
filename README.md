@@ -1,4 +1,3 @@
-```md
 # MGL7361 : Principes et applications de la conception de logiciels
 # Projet 1 : Tactiques de disponibilité (Détection + Redondance)
 **Preuve de concept - FastAPI + Docker Compose**
