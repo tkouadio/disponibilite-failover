@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tableau de bord — Tactique de Disponibilité Ping/Echo</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <h1>Tableau de bord — Disponibilité & Failover</h1>
+  <p class="subtitle">MGL7361 · UQAM · Rafraîchissement automatique toutes les 2 s</p>
+
+  <!-- Refresh indicator -->
+  <div class="refresh-bar" id="refresh-ts">Dernière mise à jour : —</div>
+
+  <!-- SECTION 1 : Statut -->
+  <div class="section-title">Statut des services</div>
+  <div class="grid-3">
+
+    <div class="card">
+      <div class="card-title">Service A (primaire)</div>
+      <div id="badge-a" class="badge badge-unknown"><span class="dot dot-unknown"></span> —</div>
+      <div id="failure-banner" class="failure-active hidden">
+        ⚠ Panne simulée active
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Service B (secours)</div>
+      <div id="badge-b" class="badge badge-unknown"><span class="dot dot-unknown"></span> —</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Routage actuel</div>
+      <div class="route-target" id="route-target">—</div>
+      <div class="route-reason" id="route-reason">En attente…</div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 2 : Actions -->
+  <div class="section-title">Actions — Stimulus manuel</div>
+  <div class="card">
+    <div class="btn-group">
+      <button class="btn btn-danger"  onclick="failPrimary()">💥 Simuler panne (Service A)</button>
+      <button class="btn btn-success" onclick="recoverPrimary()">✅ Rétablir Service A</button>
+      <button class="btn btn-neutral" onclick="resetMetrics()">🔄 Réinitialiser métriques</button>
+      <button class="btn btn-info"    onclick="testOrder()">📦 Tester /orders/1003</button>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : Métriques -->
+  <div class="section-title">Métriques de résilience</div>
+  <div class="grid-2">
+
+    <div class="card">
+      <div class="card-title">T_bascule — Temps de basculement</div>
+      <div class="metric-row">
+        <span class="metric-label">Depuis injection → 1ère réponse 200 (B)</span>
+        <span class="metric-value" id="m-tbascule1">—</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Depuis 1ère erreur → 1ère réponse 200 (B)</span>
+        <span class="metric-value" id="m-tbascule2">—</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">E_bascule — Taux d'erreurs pendant la bascule</div>
+      <div class="metric-row">
+        <span class="metric-label">Taux d'erreurs (%)</span>
+        <span class="metric-value" id="m-erate">—</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Requêtes en erreur / total (fenêtre)</span>
+        <span class="metric-value" id="m-efailed">—</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Journal total (taille)</span>
+        <span class="metric-value" id="m-logsize">—</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SECTION 4 : Dernière réponse /orders -->
+  <div class="section-title">Dernière réponse — /orders/1003</div>
+  <div class="card">
+    <div class="json-box" id="order-response">Cliquer sur "Tester /orders/1003" pour voir la réponse…</div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+  
+
+<script async src="./script.js"></script>
+</body>
+</html>

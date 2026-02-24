@@ -47,3 +47,10 @@ services:
       interval: 5s
       timeout: 2s
       retries: 10
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "3000:80"
+    depends_on:
+      - supervisor
