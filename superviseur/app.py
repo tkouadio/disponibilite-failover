@@ -283,6 +283,21 @@ async def routed_get_order(order_id: int):
 
 
 # -----------
+# Journal
+# -----------
+
+@app.get("/log")
+def get_log(limit: int = Query(default=100, ge=1, le=2000)):
+    """Retourne les dernières entrées du journal des requêtes."""
+    entries = list(request_log)[-limit:]
+    return {
+        "entries": entries,
+        "total": len(request_log),
+        "max": REQUEST_LOG_MAX,
+    }
+
+
+# -----------
 # Métriques
 # -----------
 

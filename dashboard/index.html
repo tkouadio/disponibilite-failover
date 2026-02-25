@@ -90,6 +90,57 @@
     <div class="json-box" id="order-response">Cliquer sur "Tester /orders/1003" pour voir la réponse…</div>
   </div>
 
+  <!-- SECTION 5 : Test de charge -->
+  <div class="section-title">Test de charge — 75 requêtes × 200 ms</div>
+  <div class="card">
+    <div class="btn-group" style="margin-bottom:14px;">
+      <button class="btn btn-info" id="btn-loadtest" onclick="runLoadTest()">🚀 Lancer le test (75 req)</button>
+    </div>
+    <div id="load-progress" class="hidden">
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+      <div class="load-status" id="load-status-text">0 / 75</div>
+    </div>
+    <div id="load-results" class="hidden">
+      <div class="metric-row">
+        <span class="metric-label">✅ Réponses 200 OK</span>
+        <span class="metric-value good" id="lt-ok">—</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">❌ Erreurs (non-200)</span>
+        <span class="metric-value bad" id="lt-err">—</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Taux d'erreurs</span>
+        <span class="metric-value" id="lt-erate">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6 : Journal -->
+  <div class="section-title">Journal des requêtes routées</div>
+  <div class="card">
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+      <button class="btn btn-neutral" onclick="refreshLog()">🔄 Rafraîchir</button>
+      <span class="metric-label" id="log-info">—</span>
+    </div>
+    <div class="log-table-wrap">
+      <table class="log-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Heure</th>
+            <th>Status</th>
+            <th>Routé vers</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody id="log-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div id="toast"></div>
   

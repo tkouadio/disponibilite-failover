@@ -84,13 +84,14 @@
 
   async function refreshMetrics() {
     try {
-      const res = await fetch('/api/metrics');
+      const res = await fetch('/api/metrics?post_window_s=300');
       if (!res.ok) {
         // Pas encore de panne injectée → réinitialiser
         colorMetric('m-tbascule1', null);
         colorMetric('m-tbascule2', null);
         colorMetric('m-erate', null);
         colorMetric('m-efailed', null);
+        document.getElementById('m-logsize').textContent = '—';
         return;
       }
       const d = await res.json();
@@ -114,7 +115,7 @@
         d.log ? d.log.size : '—';
 
     } catch (e) {
-      // silence
+      console.error('[refreshMetrics]', e);
     }
   }
 
@@ -128,6 +129,7 @@
       else        showToast('Erreur : ' + JSON.stringify(d), false);
     } catch { showToast('Impossible de joindre le superviseur', false); }
     refreshStatus();
+    refreshMetrics();
   }
 
   async function recoverPrimary() {
@@ -138,6 +140,7 @@
       else        showToast('Erreur : ' + JSON.stringify(d), false);
     } catch { showToast('Impossible de joindre le superviseur', false); }
     refreshStatus();
+    refreshMetrics();
   }
 
   async function resetMetrics() {
@@ -162,10 +165,90 @@
       box.textContent = 'Erreur : ' + e.message;
       showToast('Échec de la requête', false);
     }
+    refreshMetrics();
+  }
+
+  // ── Test de charge ───────────────────────────────────────────────────────────
+
+  async function runLoadTest() {
+    const btn = document.getElementById('btn-loadtest');
+    btn.disabled = true;
+
+    const progressWrap = document.getElementById('load-progress');
+    const progressBar  = document.getElementById('progress-bar');
+    const statusText   = document.getElementById('load-status-text');
+    const results      = document.getElementById('load-results');
+
+    progressWrap.classList.remove('hidden');
+    results.classList.add('hidden');
+    progressBar.style.width = '0%';
+
+    const TOTAL = 75;
+    let ok = 0, err = 0;
+
+    for (let i = 1; i <= TOTAL; i++) {
+      try {
+        const res = await fetch('/api/orders/1003');
+        if (res.ok) ok++; else err++;
+      } catch {
+        err++;
+      }
+      progressBar.style.width = `${(i / TOTAL) * 100}%`;
+      statusText.textContent = `${i} / ${TOTAL}`;
+      if (i < TOTAL) await new Promise(r => setTimeout(r, 200));
+    }
+
+    const erate = TOTAL > 0 ? ((err / TOTAL) * 100).toFixed(1) : '0';
+    document.getElementById('lt-ok').textContent   = ok;
+    document.getElementById('lt-err').textContent  = err;
+    const erEl = document.getElementById('lt-erate');
+    erEl.textContent = erate + ' %';
+    erEl.className = 'metric-value ' + (err === 0 ? 'good' : err < 10 ? 'warn' : 'bad');
+
+    results.classList.remove('hidden');
+    btn.disabled = false;
+    showToast(`Test terminé : ${ok} OK / ${err} erreurs`, err === 0);
+    refreshMetrics();
+    refreshLog();
+  }
+
+  // ── Journal ──────────────────────────────────────────────────────────────────
+
+  async function refreshLog() {
+    try {
+      const res = await fetch('/api/log?limit=100');
+      if (!res.ok) return;
+      const d = await res.json();
+
+      document.getElementById('log-info').textContent =
+        `${d.total} entrée(s) au total (affichage : ${d.entries.length} dernières)`;
+
+      const tbody = document.getElementById('log-tbody');
+      tbody.innerHTML = '';
+
+      const entries = [...d.entries].reverse();
+      entries.forEach((e, idx) => {
+        const tr  = document.createElement('tr');
+        const ts  = new Date(e.ts * 1000).toLocaleTimeString('fr-CA', { hour12: false });
+        const cls = e.status === 200 ? 'log-ok' : 'log-err';
+        tr.innerHTML = `
+          <td class="log-num">${d.total - idx}</td>
+          <td>${ts}</td>
+          <td class="${cls}">${e.status}</td>
+          <td>${e.routed_to || '—'}</td>
+          <td class="log-note">${e.note || '—'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } catch (e) {
+      console.error('[refreshLog]', e);
+    }
   }
 
   refreshStatus();
   refreshMetrics();
+  refreshLog();
   setInterval(refreshStatus,  2000);
   setInterval(refreshMetrics, 3000);
+  setInterval(refreshLog,     5000);
 

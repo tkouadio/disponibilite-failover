@@ -193,6 +193,70 @@
       border-bottom: 1px solid #1e293b;
     }
 
+    /* ---- Progress bar ---- */
+    .progress-wrap {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0369a1, #38bdf8);
+      border-radius: 999px;
+      transition: width 0.15s ease;
+    }
+    .load-status {
+      font-size: 0.78rem;
+      color: #64748b;
+      text-align: right;
+      margin-bottom: 12px;
+    }
+    .hidden { display: none !important; }
+
+    /* ---- Log table ---- */
+    .log-table-wrap {
+      overflow-x: auto;
+      max-height: 340px;
+      overflow-y: auto;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+    }
+    .log-table thead {
+      position: sticky;
+      top: 0;
+      background: #1e293b;
+      z-index: 1;
+    }
+    .log-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #64748b;
+      border-bottom: 1px solid #334155;
+    }
+    .log-table td {
+      padding: 6px 12px;
+      border-bottom: 1px solid #1e293b;
+      color: #cbd5e1;
+      white-space: nowrap;
+    }
+    .log-table tbody tr:hover { background: #263348; }
+    .log-ok   { color: #4ade80; font-weight: 700; }
+    .log-err  { color: #f87171; font-weight: 700; }
+    .log-num  { color: #475569; font-variant-numeric: tabular-nums; }
+    .log-note { color: #64748b; font-style: italic; }
+
     @media (max-width: 640px) {
       .grid-3, .grid-2 { grid-template-columns: 1fr; }
     }
